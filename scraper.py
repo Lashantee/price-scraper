@@ -10,24 +10,22 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 def init_driver():
-    """ბრაუზერის კონფიგურაცია და დაცვების გვერდის ავლით მუშაობა"""
+    """ბრაუზერის ოპტიმიზირებული კონფიგურაცია GitHub Actions-ისთვის"""
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  
-    options.add_argument("--disable-gpu")
+    options.add_argument("--headless=new") # ახალი, უფრო სტაბილური headless რეჟიმი
     options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-dev-shm-usage") # 🛠️ ხელს უშლის მეხსიერების გამო გაყინვას Linux-ზე
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-extensions")
     options.add_argument("--window-size=1920,1080")
     
-    # იმიტაცია, რომ რეალური მომხმარებელია
+    # მომხმარებლის იმიტაცია
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    options.add_experimental_option('useAutomationExtension', False)
     
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
     
-    # 🛑 კრიტიკული მომენტი: თუ გვერდი 15 წამში არ ჩაიტვირთა, კოდი არ გაიყინოს და გააგრძელოს
-    driver.set_page_load_timeout(15)
+    driver.set_page_load_timeout(20) # დროის ლიმიტი გვერდისთვის
     return driver
 
 def get_nova_price(driver, code):
