@@ -15,15 +15,9 @@ jobs:
       with:
         python-version: '3.10'
 
-    # 🛠️ ეს ნაბიჯი უზრუნველყოფს, რომ Linux სერვერს ჰქონდეს Chrome-ის ყველა საჭირო ბიბლიოთეკა
-    - name: Install Chrome and dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libxss1 libappindicator1 libgconf-2-4 libxi6 libgbm1
-
     - name: Install dependencies
       run: |
-        pip install pandas openpyxl selenium webdriver-manager
+        pip install pandas openpyxl requests
 
     - name: Run Scraper
       run: python scraper.py
